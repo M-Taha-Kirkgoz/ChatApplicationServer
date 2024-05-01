@@ -2,7 +2,6 @@
 using ChatApplicationServer.Dtos;
 using ChatApplicationServer.Models;
 using GenericFileService.Files;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +21,7 @@ public sealed class AuthController(
         bool isNameExists = await context.Users.AnyAsync(p => p.Name == request.Name, cancellationToken);
 
         if (isNameExists)
-            return BadRequest(new { Message = "Bu kullanıcı adı daha önce kullanılmış!" });
+            return BadRequest(new { Message = "Bu kullanıcı adı daha önce kullanılmış !" });
 
         string avatar = FileService.FileSaveToServer(request.File, "wwwroot/avatar/");
 
@@ -36,5 +35,16 @@ public sealed class AuthController(
         await context.SaveChangesAsync();
         
         return NoContent();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Login(string name, CancellationToken cancellationToken)
+    {
+        User? user = await context.Users.FirstOrDefaultAsync(p => p.Name == name, cancellationToken);
+
+        if (user is null)
+            return BadRequest(new { Message = "Kullanıcı bulunamadı !" });
+
+        return Ok(user);
     }
 }

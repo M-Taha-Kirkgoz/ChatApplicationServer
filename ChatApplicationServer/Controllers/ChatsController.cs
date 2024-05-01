@@ -14,6 +14,14 @@ public sealed class ChatsController(
     ApplicationDbContext context,
     IHubContext<ChatHub> hubContext) : ControllerBase
 {
+
+    [HttpGet]
+    public async Task<IActionResult> GetUsers()
+    {
+        List<User> users = await context.Users.OrderBy(x => x.Name).ToListAsync();
+        return Ok(users);
+    }
+
     [HttpGet]
     public async Task<IActionResult> GetChats(Guid userId, Guid toUserId, CancellationToken cancellationToken)
     {

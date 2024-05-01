@@ -13,7 +13,7 @@ public sealed class AuthController(
     ApplicationDbContext context) : ControllerBase
 {
     [HttpPost]
-    public async Task<IActionResult> Register(RegisterDto request, CancellationToken cancellationToken)
+    public async Task<IActionResult> Register([FromForm] RegisterDto request, CancellationToken cancellationToken)
     {
         // IActionResult == Result yani geri dönüş tipi belirtmek için kullanılır (Json - Status - Redirect)
         // CancellationToke == Bir görevin veya işlemin iptal edilmesine izin verir.
@@ -34,7 +34,7 @@ public sealed class AuthController(
         await context.AddAsync(user, cancellationToken);
         await context.SaveChangesAsync();
         
-        return NoContent();
+        return Ok(user);
     }
 
     [HttpGet]

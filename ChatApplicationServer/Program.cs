@@ -24,6 +24,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseStaticFiles(); // wwwroot klasörüne dýþarýdan eriþim için, "UserStaticFiles()" eklemesi yapýldý.
+
 app.UseHttpsRedirection();
 
 app.UseCors();

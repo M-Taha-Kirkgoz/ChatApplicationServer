@@ -45,6 +45,11 @@ public sealed class AuthController(
         if (user is null)
             return BadRequest(new { Message = "Kullanıcı bulunamadı !" });
 
+        user.Status = "online";
+        // Kullanıcı giriş yaptığında online olarak görünsün.
+
+        await context.SaveChangesAsync(cancellationToken);
+
         return Ok(user);
     }
 }

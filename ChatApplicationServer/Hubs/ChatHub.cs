@@ -28,6 +28,8 @@ public sealed class ChatHub(
         Guid userId;
         Users.TryGetValue(Context.ConnectionId, out userId);
 
+        Users.Remove(Context.ConnectionId);
+
         User? user = await context.Users.FindAsync(userId);
 
         if (user is not null)

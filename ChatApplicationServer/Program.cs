@@ -34,6 +34,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapHub<ChatHub>("/chat-hub");
+app.MapHub<ChatHub>("/chat-hub"); // Client'den signalR ile baðlantý kurulduktan sonra, Server ile iletiþim kurabilmesi için MapHub entegre edildi.
 
 app.Run();

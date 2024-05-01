@@ -56,6 +56,6 @@ public sealed class ChatsController(
 
         await hubContext.Clients.Client(connectionId).SendAsync("Messages", chat);
 
-        return Ok();
+        return Ok(chat);
     }
 }

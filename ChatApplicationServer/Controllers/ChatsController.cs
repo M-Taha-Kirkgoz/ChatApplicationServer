@@ -1,7 +1,9 @@
 ﻿using ChatApplicationServer.Context;
 using ChatApplicationServer.Dtos;
+using ChatApplicationServer.Hubs;
 using ChatApplicationServer.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace ChatApplicationServer.Controllers;
@@ -9,7 +11,8 @@ namespace ChatApplicationServer.Controllers;
 [ApiController]
 
 public sealed class ChatsController(
-    ApplicationDbContext context) : ControllerBase
+    ApplicationDbContext context,
+    IHubContext<ChatHub> hubContext) : ControllerBase
 {
     [HttpGet]
     public async Task<IActionResult> GetChats(Guid userId, Guid toUserId, CancellationToken cancellationToken)
@@ -40,6 +43,10 @@ public sealed class ChatsController(
 
         await context.AddAsync(chat, cancellationToken);
         await context.SaveChangesAsync(cancellationToken);
+
+        string connectionId = ChatHub.Users.First(p => p.Value == chat.ToUserId).Key;
+
+        await hubContext.Clients.Client(connectionId).SendAsync("Messages", chat);
 
         return Ok();
     }

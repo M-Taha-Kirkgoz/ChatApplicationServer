@@ -1,5 +1,6 @@
 using ChatApplicationServer.Context;
 using ChatApplicationServer.Hubs;
+using DefaultCorsPolicyNugetPackage;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +14,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddSignalR();
 
+builder.Services.AddDefaultCors();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -22,6 +25,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors();
 
 app.UseAuthorization();
 
